@@ -4,8 +4,33 @@ import (
 	"slices"
 )
 
-func topKFrequent(nums []int, k int) []int {
-	return solution1(nums, k)
+func TopKFrequent(nums []int, k int) []int {
+
+	//segunda solucao : bucket sort
+	m := make(map[int]int)
+	for _, v := range nums {
+		m[v]++
+	}
+
+	// aloca bucket  onde cada indice s[value] armazena elementos que
+	// apareceram 'value' vezes
+	s := make([][]int, len(nums)+1)
+	for key, value := range m {
+		s[value] = append(s[value], key)
+	}
+
+	res := make([]int, 0)
+	// itera de trás para frente nos buckets e monta res
+	for i := len(s) - 1; i >= 0; i-- {
+		for _, v := range s[i] {
+			res = append(res, v)
+			if len(res) == k {
+				return res
+			}
+		}
+	}
+
+	return res
 }
 
 // primeira solução: contar repetição . tempo O(n log n)
